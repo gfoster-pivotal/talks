@@ -1,0 +1,11 @@
+[
+  {
+    "title": "foo",
+    "isbn": "bar",
+    "author": {
+      "firstName": "test",
+      "lastName": "test"
+    },
+    "date": 1476065872910
+  }
+]
