@@ -1,1 +1,1 @@
-include 'producer', 'consumer'
+include 'book-producer', 'consumer'
