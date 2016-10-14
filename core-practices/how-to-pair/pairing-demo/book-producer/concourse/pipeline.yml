@@ -1,10 +1,16 @@
 ---
-platform: linux
+resources:
+- name: resource-tutorial
+  type: git
+  source:
+    uri: https://github.com/gfoster-pivotal/talks.git
 
-image_resource:
-  type: docker-image
-  source: {repository: busybox}
-
-run:
-  path: echo
-  args: [hello world]
+jobs:
+- name: book-producer
+  public: true
+  plan:
+  - get: resource-tutorial
+  - task: create-some-files
+    file: resource-tutorial/11_task_outputs_to_inputs/create_some_files.yml
+  - task: show-some-files
+    file: resource-tutorial/11_task_outputs_to_inputs/show_files.yml

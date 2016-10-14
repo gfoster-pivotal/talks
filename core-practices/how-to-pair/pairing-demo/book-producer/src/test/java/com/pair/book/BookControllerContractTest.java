@@ -36,7 +36,9 @@ public class BookControllerContractTest {
 
     @Test
     public void doStuff() throws Exception {
-        MockHttpServletResponse mockHttpServletResponse = mockMvc.perform(get("/books")).andReturn().getResponse();
+        MockHttpServletResponse mockHttpServletResponse = mockMvc.perform(get("/books"))
+                .andReturn()
+                .getResponse();
         FileWriter fileWriter = new FileWriter("/Users/georgefoster/workspace/talks/core-practices/how-to-pair/pairing-demo/producer/src/test/resources/contracts/output.json");
         BufferedWriter out = new BufferedWriter(fileWriter);
         out.write(mockHttpServletResponse.getContentAsString());
