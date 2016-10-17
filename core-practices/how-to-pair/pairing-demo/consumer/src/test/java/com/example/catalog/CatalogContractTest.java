@@ -7,6 +7,7 @@ import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -38,30 +39,35 @@ public class CatalogContractTest {
 
     MockMvc mockMvc;
 
+    MockRestServiceServer server;
+
     @Before
-    public void setUp() throws Exception {
+    public void setUpMockMvc() throws Exception {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+    }
+
+    @Before
+    public void setUpMockRestServer() throws Exception {
+        server = MockRestServiceServer.bindTo(catalogController.getRestTemplate())
+                .build();
     }
 
     @Test
     public void doStuff() throws Exception {
-        String inputFile = "/Users/georgefoster/workspace/talks/core-practices/how-to-pair/pairing-demo/producer/src/test/resources/contracts/output.json";
+        FileSystemResource fileSystemResource = new FileSystemResource("../book-producer/src/test/resources/contracts/output.json");
         Path inputPath = FileSystems
                 .getDefault()
-                .getPath(inputFile);
+                .getPath(fileSystemResource.getPath());
         byte[] bytes = Files.readAllBytes(inputPath);
 
-        MockRestServiceServer server = MockRestServiceServer
-                .bindTo(catalogController.getRestTemplate())
-                .build();
         server.expect(manyTimes(), requestTo(catalogController.getBookApiUrl()))
                 .andExpect(method(HttpMethod.GET))
                 .andRespond(withSuccess(bytes, MediaType.APPLICATION_JSON));
 
-        String outputFile = "/Users/georgefoster/workspace/talks/core-practices/how-to-pair/pairing-demo/consumer/src/test/resources/contracts/output.json";
+        FileSystemResource outputFileSystemResource = new FileSystemResource("src/test/resources/contracts/output.json");
         Path outputPath = FileSystems
                 .getDefault()
-                .getPath(outputFile);
+                .getPath(outputFileSystemResource.getPath());
         String expected = new String(Files.readAllBytes(outputPath), Charset.forName("UTF-8"));
         String actual = mockMvc.perform(get("/catalogs"))
                 .andExpect(MockMvcResultMatchers.status().isOk())

@@ -1,23 +1,14 @@
 subprojects {
-    apply plugin: 'java'
-    apply plugin: 'eclipse-wtp'
-    apply plugin: 'idea'
+   apply plugin: 'java'
 
-    repositories {
-        mavenLocal()
-        mavenCentral()
-        maven { url "http://repo.spring.io/snapshot" }
-        maven { url "http://repo.spring.io/milestone" }
-        maven { url "http://repo.spring.io/release" }
-    }
+   sourceCompatibility = 1.8
+   targetCompatibility = 1.8
 
-    dependencies {
-        testCompile 'junit:junit:4.12'
-    }
+   repositories {
+      mavenCentral()
+   }
 
-    version = '1.0'
+   dependencies {
 
-    jar {
-        manifest.attributes provider: 'gradle'
-    }
+   }    
 }

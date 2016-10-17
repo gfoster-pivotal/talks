@@ -5,6 +5,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -12,6 +14,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -35,13 +38,18 @@ public class BookControllerContractTest {
     }
 
     @Test
-    public void doStuff() throws Exception {
-        MockHttpServletResponse mockHttpServletResponse = mockMvc.perform(get("/books"))
+    public void writeProducerContract() throws Exception {
+        String contentAsString = mockMvc.perform(get("/books"))
                 .andReturn()
-                .getResponse();
-        FileWriter fileWriter = new FileWriter("/Users/georgefoster/workspace/talks/core-practices/how-to-pair/pairing-demo/producer/src/test/resources/contracts/output.json");
-        BufferedWriter out = new BufferedWriter(fileWriter);
-        out.write(mockHttpServletResponse.getContentAsString());
+                .getResponse()
+                .getContentAsString();
+
+        FileSystemResource fileSystemResource = new FileSystemResource("src/test/resources/contracts/output.json");
+//        ClassPathResource classPathResource = new ClassPathResource("classpath*:contracts/output.json");
+        File file = fileSystemResource.getFile();
+        System.out.println("file = " + file);
+        BufferedWriter out = new BufferedWriter(new FileWriter(file));
+        out.write(contentAsString);
         out.close();
     }
 }
