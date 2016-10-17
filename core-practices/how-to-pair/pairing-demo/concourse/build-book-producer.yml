@@ -12,8 +12,8 @@ inputs:
 #- name: pairing-demo
 
 run:
-  path: bash
-  args:
-    - "-c"
-    - "echo hello; ls -ltr"
+  path: ./pairing-demo/core-practices/how-to-pair/pairing-demo/concourse/build-book-producer.sh
+#  args:
+#    - "-c"
+#    - "echo hello; ls -ltr"
 #    - "ls -ltr; pwd; cd ./core-practices/how-to-pair/pairing-demo/; ./gradlew book-producer:assemble"
