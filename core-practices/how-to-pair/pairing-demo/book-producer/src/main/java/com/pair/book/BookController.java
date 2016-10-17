@@ -11,6 +11,6 @@ import java.util.List;
 public class BookController {
     @RequestMapping(path = "/books")
     public List<Book> getBooks() {
-        return Collections.singletonList(new Book("foo", "bar", "baz", new Date()));
+        return Collections.singletonList(new Book("foo", "bar", "baz"));
     }
 }

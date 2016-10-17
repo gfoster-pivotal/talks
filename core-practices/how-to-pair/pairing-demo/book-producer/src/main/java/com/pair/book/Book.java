@@ -6,13 +6,11 @@ public class Book {
     private final String title;
     private final String isbn;
     private final String author;
-    private final Date date;
 
-    public Book(String title, String isbn, String author, Date date) {
+    public Book(String title, String isbn, String author) {
         this.title = title;
         this.isbn = isbn;
         this.author = author;
-        this.date = date;
     }
 
     public String getAuthor() {
@@ -27,7 +25,4 @@ public class Book {
         return isbn;
     }
 
-    public Date getDate() {
-        return date;
-    }
 }
