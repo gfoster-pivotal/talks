@@ -6,4 +6,5 @@ pwd;
 which gradle;
 ls -altr gradlew;
 # gradle book-producer:assemble;
+gradlew book-producer:assemble;
 ./gradlew book-producer:assemble;
