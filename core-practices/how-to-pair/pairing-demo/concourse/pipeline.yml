@@ -1,0 +1,16 @@
+---
+resources:
+- name: pairing-demo
+  type: git
+  source:
+    uri: https://github.com/gfoster-pivotal/talks.git
+
+jobs:
+- name: book-producer
+  public: true
+  plan:
+  - get: pairing-demo
+  - task: build-book-producer
+    file: core-practices/how-to-pair/pairing-demo/concourse/build-book-producer.yml
+  - task: build-catalog-consumer
+    file: core-practices/how-to-pair/pairing-demo/concourse/build-catalog-consumer.yml
