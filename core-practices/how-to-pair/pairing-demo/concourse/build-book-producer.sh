@@ -1,4 +1,6 @@
 #!/bin/sh
 
 cd pairing-demo/core-practices/how-to-pair/pairing-demo/;
-./gradlew book-producer:assemble
+ls -altr;
+pwd;
+./gradlew book-producer:assemble;
