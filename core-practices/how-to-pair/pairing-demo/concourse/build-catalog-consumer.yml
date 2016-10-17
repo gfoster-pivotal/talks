@@ -8,11 +8,12 @@ image_resource:
 inputs:
 - name: pairing-demo
 
-outputs:
-- name: pairing-demo
+#outputs:
+#- name: pairing-demo
 
 run:
   path: bash
   args:
     - "-c"
-    - "cd ./core-practices/how-to-pair/pairing-demo/; ./gradlew consumer:assemble"
+    - "echo hello; ls -ltr"
+#    - "cd ./core-practices/how-to-pair/pairing-demo/; ./gradlew consumer:assemble"

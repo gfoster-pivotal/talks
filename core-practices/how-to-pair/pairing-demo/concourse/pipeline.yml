@@ -11,6 +11,6 @@ jobs:
   plan:
   - get: pairing-demo
   - task: build-book-producer
-    file: core-practices/how-to-pair/pairing-demo/concourse/build-book-producer.yml
+    file: pairing-demo/core-practices/how-to-pair/pairing-demo/concourse/build-book-producer.yml
   - task: build-catalog-consumer
-    file: core-practices/how-to-pair/pairing-demo/concourse/build-catalog-consumer.yml
+    file: pairing-demo/core-practices/how-to-pair/pairing-demo/concourse/build-catalog-consumer.yml

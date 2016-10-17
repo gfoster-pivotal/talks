@@ -8,8 +8,8 @@ image_resource:
 inputs:
 - name: pairing-demo
 
-outputs:
-- name: pairing-demo
+#outputs:
+#- name: pairing-demo
 
 run:
   path: bash
