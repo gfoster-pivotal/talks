@@ -10,7 +10,14 @@ jobs:
   public: true
   plan:
   - get: pairing-demo
+    trigger: true
   - task: build-book-producer
     file: pairing-demo/core-practices/how-to-pair/pairing-demo/concourse/build-book-producer.yml
-  - task: build-catalog-consumer
-    file: pairing-demo/core-practices/how-to-pair/pairing-demo/concourse/build-catalog-consumer.yml
+- name: catalog-consumer
+  public: true
+  plan:
+    - get: pairing-demo
+      passed: [book-producer]
+      trigger: true
+    - task: build-catalog-consumer
+      file: pairing-demo/core-practices/how-to-pair/pairing-demo/concourse/build-catalog-consumer.yml
