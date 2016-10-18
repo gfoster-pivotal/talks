@@ -8,8 +8,5 @@ image_resource:
 inputs:
 - name: pairing-demo
 
-#outputs:
-#- name: pairing-demo
-
 run:
-  path: ./pairing-demo/core-practices/how-to-pair/pairing-demo/concourse/build-book-producer.sh
+  path: ./pairing-demo/core-practices/how-to-pair/pairing-demo/concourse/build-catalog-consumer.sh
