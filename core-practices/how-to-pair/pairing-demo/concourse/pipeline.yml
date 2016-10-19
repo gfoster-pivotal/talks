@@ -26,14 +26,14 @@ jobs:
 - name: catalog-consumer-previous
   public: true
   plan:
-    - get: catalog-consumer-previous
+    - get: catalog-consumer
       version:
-        ref: 8e246a1404981f0acd19557092584e6af250c421
+        ref: c2bbc20b82d52e002fc060bec438958679f31761
     - get: book-producer
       passed: [book-producer]
       trigger: true
     - task: build-catalog-consumer
-      file: catalog-consumer-previous/core-practices/how-to-pair/pairing-demo/concourse/build-catalog-consumer.yml
+      file: catalog-consumer/core-practices/how-to-pair/pairing-demo/concourse/build-catalog-consumer.yml
 
 #- name: catalog-consumer-current
 #  public: true
