@@ -6,7 +6,7 @@ image_resource:
   source: {repository: frekele/gradle}
 
 inputs:
-- name: pairing-demo
+- name: book-producer
 
 run:
-  path: ./pairing-demo/core-practices/how-to-pair/pairing-demo/concourse/build-catalog-consumer.sh
+  path: ./book-producer/core-practices/how-to-pair/pairing-demo/concourse/build-book-producer.sh

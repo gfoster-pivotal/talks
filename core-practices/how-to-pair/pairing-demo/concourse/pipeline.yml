@@ -1,23 +1,45 @@
 ---
 resources:
-- name: pairing-demo
+- name: book-producer
   type: git
   source:
     uri: https://github.com/gfoster-pivotal/talks.git
+- name: catalog-consumer
+  type: git
+  source:
+    uri: https://github.com/gfoster-pivotal/talks.git
+- name: catalog-consumer-previous
+  type: git
+  source:
+    uri: https://github.com/gfoster-pivotal/talks.git
+
 
 jobs:
 - name: book-producer
   public: true
   plan:
-  - get: pairing-demo
+  - get: book-producer
     trigger: true
   - task: build-book-producer
-    file: pairing-demo/core-practices/how-to-pair/pairing-demo/concourse/build-book-producer.yml
-- name: catalog-consumer
-  public: true
-  plan:
-    - get: pairing-demo
-      passed: [book-producer]
-      trigger: true
-    - task: build-catalog-consumer
-      file: pairing-demo/core-practices/how-to-pair/pairing-demo/concourse/build-catalog-consumer.yml
+    file: book-producer/core-practices/how-to-pair/pairing-demo/concourse/build-book-producer.yml
+
+#- name: catalog-consumer-previous
+#  public: true
+#  plan:
+#    - get: catalog-consumer-previous
+#      version:
+#        ref: 8e246a1404981f0acd19557092584e6af250c421
+#    - get: book-producer
+#      passed: [book-producer]
+#      trigger: true
+#    - task: build-catalog-consumer
+#      file: pairing-demo-previous/core-practices/how-to-pair/pairing-demo/concourse/build-catalog-consumer.yml
+
+#- name: catalog-consumer-current
+#  public: true
+#  plan:
+#    - get: pairing-demo
+#      passed: [book-producer]
+#      trigger: true
+#    - task: build-catalog-consumer
+#      file: pairing-demo/core-practices/how-to-pair/pairing-demo/concourse/build-catalog-consumer.yml

@@ -1,0 +1,35 @@
+---
+resources:
+- name: pairing-demo
+  type: git
+  source:
+    uri: https://github.com/gfoster-pivotal/talks.git
+
+jobs:
+- name: book-producer
+  public: true
+  plan:
+  - get: pairing-demo
+    trigger: true
+  - task: build-book-producer
+    file: pairing-demo/core-practices/how-to-pair/pairing-demo/concourse/build-book-producer.yml
+
+- name: catalog-consumer-previous
+  public: true
+  plan:
+    - get: pairing-demo
+      version:
+        ref: 8e246a1404981f0acd19557092584e6af250c421
+      passed: [book-producer]
+      trigger: true
+    - task: build-catalog-consumer
+      file: pairing-demo/core-practices/how-to-pair/pairing-demo/concourse/build-catalog-consumer.yml
+
+- name: catalog-consumer-current
+  public: true
+  plan:
+    - get: pairing-demo
+      passed: [book-producer]
+      trigger: true
+    - task: build-catalog-consumer
+      file: pairing-demo/core-practices/how-to-pair/pairing-demo/concourse/build-catalog-consumer.yml
