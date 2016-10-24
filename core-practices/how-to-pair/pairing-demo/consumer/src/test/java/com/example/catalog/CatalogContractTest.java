@@ -1,11 +1,11 @@
 package com.example.catalog;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpMethod;
@@ -43,7 +43,8 @@ public class CatalogContractTest {
 
     @Before
     public void setUpMockMvc() throws Exception {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
+                .build();
     }
 
     @Before
@@ -65,13 +66,14 @@ public class CatalogContractTest {
                 .andRespond(withSuccess(bytes, MediaType.APPLICATION_JSON));
 
         FileSystemResource outputFileSystemResource = new FileSystemResource("src/test/resources/contracts/output.json");
-        Path outputPath = FileSystems
-                .getDefault()
+        Path outputPath = FileSystems.getDefault()
                 .getPath(outputFileSystemResource.getPath());
         String expected = new String(Files.readAllBytes(outputPath), Charset.forName("UTF-8"));
         String actual = mockMvc.perform(get("/catalogs"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andReturn().getResponse().getContentAsString();
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
 
         JSONAssert.assertEquals(expected, actual, true);
     }

@@ -3,7 +3,7 @@ platform: linux
 
 image_resource:
   type: docker-image
-  source: {repository: frekele/gradle}
+  source: {repository: andresriancho/w3af}
 
 inputs:
 - name: catalog-consumer

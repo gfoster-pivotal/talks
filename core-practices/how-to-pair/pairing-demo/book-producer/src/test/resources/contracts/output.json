@@ -1,1 +1,7 @@
-[{"title":"foo","isbn":"bar","author":"baz"}]
+[
+  {
+    "title": "foo",
+    "isbn": "bar",
+    "author": "baz"
+  }
+]

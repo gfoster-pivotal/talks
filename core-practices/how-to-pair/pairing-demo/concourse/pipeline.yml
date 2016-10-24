@@ -8,11 +8,6 @@ resources:
   type: git
   source:
     uri: https://github.com/gfoster-pivotal/talks.git
-- name: catalog-consumer-previous
-  type: git
-  source:
-    uri: https://github.com/gfoster-pivotal/talks.git
-
 
 jobs:
 - name: book-producer
@@ -23,23 +18,48 @@ jobs:
   - task: build-book-producer
     file: book-producer/core-practices/how-to-pair/pairing-demo/concourse/build-book-producer.yml
 
-- name: catalog-consumer-previous
+- name: catalog-consumer
   public: true
   plan:
     - get: catalog-consumer
-      version:
-        ref: c2bbc20b82d52e002fc060bec438958679f31761
     - get: book-producer
       passed: [book-producer]
       trigger: true
     - task: build-catalog-consumer
       file: catalog-consumer/core-practices/how-to-pair/pairing-demo/concourse/build-catalog-consumer.yml
 
-#- name: catalog-consumer-current
-#  public: true
-#  plan:
-#    - get: pairing-demo
-#      passed: [book-producer]
-#      trigger: true
-#    - task: build-catalog-consumer
-#      file: pairing-demo/core-practices/how-to-pair/pairing-demo/concourse/build-catalog-consumer.yml
+- name: security-scan
+  public: true
+  plan:
+    - get: book-producer
+      trigger: true
+      passed: [book-producer]
+    - task: scan-book-producer
+      config:
+        platform: linux
+        image_resource:
+          type: docker-image
+          source: {repository: andresriancho/w3af}
+        inputs:
+        - name: book-producer
+        run:
+          path: echo
+          args: [time to security scan]
+
+- name: deploy
+  public: true
+  plan:
+    - get: book-producer
+      passed: [catalog-consumer, security-scan]
+      trigger: true
+    - task: dev-deployment
+      config:
+        platform: linux
+        image_resource:
+          type: docker-image
+          source: {repository: lwieske/cloudfoundrycli}
+        inputs:
+        - name: book-producer
+        run:
+          path: bash
+          args: ["-c", "cf login -a https://api.local.pcfdev.io --skip-ssl-validation -u user -p pass; ls -ltr book-producer/build/libs"]
