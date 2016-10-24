@@ -62,4 +62,4 @@ jobs:
         - name: book-producer
         run:
           path: bash
-          args: ["-c", "cf login -a https://api.local.pcfdev.io --skip-ssl-validation -u user -p pass; ls -ltr book-producer/build/libs"]
+          args: ["-c", "cf login -a https://api.local.pcfdev.io --skip-ssl-validation -u user -p pass; ls -ltr "]
