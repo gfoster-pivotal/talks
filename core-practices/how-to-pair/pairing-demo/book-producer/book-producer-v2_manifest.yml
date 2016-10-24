@@ -6,3 +6,4 @@ applications:
   routes:
   - route: book-producer-v2-immaculate-arenite.local.pcfdev.io
   stack: cflinuxfs2
+  path: build/libs/book-producer-0.0.1-SNAPSHOT.jar
