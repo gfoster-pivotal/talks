@@ -1,0 +1,8 @@
+applications:
+- name: book-producer-v1
+  instances: 1
+  memory: 256M
+  disk_quota: 512M
+  routes:
+  - route: book-producer-v1-unconsociated-fuage.local.pcfdev.io
+  stack: cflinuxfs2

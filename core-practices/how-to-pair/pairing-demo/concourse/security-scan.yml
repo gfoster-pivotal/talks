@@ -1,0 +1,12 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source: {repository: frekele/gradle}
+
+inputs:
+- name: catalog-consumer
+
+run:
+  path: ./catalog-consumer/core-practices/how-to-pair/pairing-demo/concourse/build-catalog-consumer.sh
