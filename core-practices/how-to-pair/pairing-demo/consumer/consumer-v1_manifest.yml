@@ -1,0 +1,12 @@
+applications:
+- name: consumer-v1
+  instances: 1
+  memory: 256M
+  disk_quota: 512M
+  routes:
+  - route: consumer-v1.local.pcfdev.io
+  - route: consumer.local.pcfdev.io
+  env:
+    com.example.book.api: http://book.local.pcfdev.io/books
+  stack: cflinuxfs2
+  path: build/libs/consumer-0.0.1-SNAPSHOT.jar
