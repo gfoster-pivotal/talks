@@ -1,5 +1,8 @@
 #!/bin/sh
 
+fly sp -t demo-api -p demo-api -c pipeline.yml -n;
+fly up -t demo-api -p demo-api;
+
 cd ..;
 gradle assemble;
 cf login -a https://api.local.pcfdev.io --skip-ssl-validation -u user -p pass;
