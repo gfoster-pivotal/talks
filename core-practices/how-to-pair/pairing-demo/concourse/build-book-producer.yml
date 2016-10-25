@@ -7,6 +7,10 @@ image_resource:
 
 inputs:
 - name: book-producer
+- name: resource-gist
+
+outputs:
+- name: updated-gist
 
 run:
   path: ./book-producer/core-practices/how-to-pair/pairing-demo/concourse/build-book-producer.sh
