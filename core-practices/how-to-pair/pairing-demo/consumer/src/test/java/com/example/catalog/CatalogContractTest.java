@@ -5,6 +5,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.skyscreamer.jsonassert.JSONAssert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -62,6 +64,7 @@ public class CatalogContractTest {
     @Test
     public void doStuff() throws Exception {
         System.out.println("location = " + location);
+        System.out.println("Working Directory = " + System.getProperty("user.dir"));
         FileSystemResource fileSystemResource = new FileSystemResource(location);
         Path inputPath = FileSystems
                 .getDefault()
