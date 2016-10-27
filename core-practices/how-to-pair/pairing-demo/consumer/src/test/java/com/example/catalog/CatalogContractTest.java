@@ -61,6 +61,7 @@ public class CatalogContractTest {
 
     @Test
     public void doStuff() throws Exception {
+        System.out.println("location = " + location);
         FileSystemResource fileSystemResource = new FileSystemResource(location);
         Path inputPath = FileSystems
                 .getDefault()
