@@ -4,6 +4,6 @@ applications:
   memory: 256M
   disk_quota: 512M
   routes:
-  - route: book-producer-v2-immaculate-arenite.local.pcfdev.io
+  - route: book-producer-new.local.pcfdev.io
   stack: cflinuxfs2
   path: build/libs/book-producer-0.0.1-SNAPSHOT.jar
