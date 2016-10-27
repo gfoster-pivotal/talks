@@ -1,12 +1,13 @@
 #!/bin/sh
 
-fly sp -t demo-api -p demo-api -c pipeline.yml -n;
+fly -t demo-api login  --concourse-url http://192.168.100.4:8080;
+fly -t demo-api sync;
+fly sp -t demo-api -p demo-api -c concourse/pipeline.yml -n;
 fly up -t demo-api -p demo-api;
 
 cf dev destroy;
 cf dev start;
 
-cd ..;
 gradle assemble;
 cf login -a https://api.local.pcfdev.io --skip-ssl-validation -u user -p pass;
 
