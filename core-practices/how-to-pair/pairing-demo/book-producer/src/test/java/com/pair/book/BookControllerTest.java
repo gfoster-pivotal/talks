@@ -12,6 +12,9 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.time.Instant;
+import java.util.Date;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 
@@ -36,6 +39,12 @@ public class BookControllerTest {
         Book book = bookController.getBooks().get(0);
         assertThat(book.getTitle()).isEqualToIgnoringCase("Moby Dick");
         assertThat(book.getIsbn()).isEqualToIgnoringCase("0553213113");
+    }
+
+    @Test
+    public void could_this_be_a_good_test() {
+        Date date = bookController.getBooks().get(0).getDate();
+        assertThat(date).isBetween(Date.from(Instant.ofEpochMilli(0)), Date.from(Instant.now()));
     }
 
     @Test
