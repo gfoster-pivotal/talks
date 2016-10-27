@@ -6,10 +6,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.test.web.servlet.MockMvc;
@@ -30,7 +32,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
+@ActiveProfiles("test")
 public class CatalogContractTest {
+    @Value("${producer.contract.location}")
+    String location;
+
     @Autowired
     CatalogController catalogController;
 
@@ -55,7 +61,7 @@ public class CatalogContractTest {
 
     @Test
     public void doStuff() throws Exception {
-        FileSystemResource fileSystemResource = new FileSystemResource("../book-producer/src/test/resources/contracts/output.json");
+        FileSystemResource fileSystemResource = new FileSystemResource(location);
         Path inputPath = FileSystems
                 .getDefault()
                 .getPath(fileSystemResource.getPath());
