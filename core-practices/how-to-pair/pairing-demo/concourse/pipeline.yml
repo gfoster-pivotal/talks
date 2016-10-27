@@ -8,6 +8,13 @@ resources:
   type: git
   source:
     uri: https://github.com/gfoster-pivotal/talks.git
+- name: resource-gist
+  type: git
+  source:
+    uri: git@gist.github.com:14521df0e24925c9c3462ab968c6b010.git
+    branch: master
+    private_key: 
+
 
 jobs:
 - name: book-producer
@@ -15,19 +22,76 @@ jobs:
   plan:
   - get: book-producer
     trigger: true
+  - get: resource-gist
   - task: build-book-producer
-    file: book-producer/core-practices/how-to-pair/pairing-demo/concourse/build-book-producer.yml
+    config:
+      platform: linux
+
+      image_resource:
+        type: docker-image
+        source: {repository: georgepfoster/git-gradle-cf}
+
+      inputs:
+      - name: book-producer
+      - name: resource-gist
+
+      outputs:
+      - name: updated-gist
+
+      run:
+        path: bash
+        args: ["-c", " \
+          cp -R resource-gist/* updated-gist; \
+          cp -R resource-gist/.git updated-gist; \
+
+          export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64; \
+
+          cd book-producer/core-practices/how-to-pair/pairing-demo/; \
+          ./gradlew --stacktrace clean book-producer:build; \
+
+          cd -; \
+          cp book-producer/core-practices/how-to-pair/pairing-demo/book-producer/build/libs/book-producer-0.0.1-SNAPSHOT.jar updated-gist;
+          cp book-producer/core-practices/how-to-pair/pairing-demo/book-producer/src/test/resources/contracts/output.json updated-gist/book-producer-contract.json;
+          cp book-producer/core-practices/how-to-pair/pairing-demo/book-producer/book-producer_manifest.yml updated-gist/book-producer_manifest.yml;
+          cd updated-gist; \
+
+          git config --global user.email \"gfoster@gopivotal.com\"; \
+          git config --global user.name \"gfoster-pivotal\"; \
+          git add .; \
+          git commit -m \"update the book producer\";
+        "]
+  - put: resource-gist
+    params: {repository: updated-gist}
 
 - name: catalog-consumer
   public: true
   plan:
     - get: catalog-consumer
+    - get: resource-gist
     - get: book-producer
-      passed: [book-producer]
       trigger: true
+      passed: [book-producer]
     - task: build-catalog-consumer
-      file: catalog-consumer/core-practices/how-to-pair/pairing-demo/concourse/build-catalog-consumer.yml
+      config:
+        platform: linux
 
+        image_resource:
+          type: docker-image
+          source: {repository: frekele/gradle}
+
+        inputs:
+        - name: catalog-consumer
+        - name: resource-gist
+        - name: book-producer
+        run:
+          path: bash
+          args: ["-c", "
+          ls -altr; \
+          export producer_contract_location=$(pwd)/resource-gist/book-producer-contract.json; \
+          echo 'find me = ' + ${producer_contract_location};
+          cd catalog-consumer/core-practices/how-to-pair/pairing-demo/; \
+          gradle --stacktrace --info consumer:build;
+          "]
 - name: security-scan
   public: true
   plan:
@@ -46,12 +110,13 @@ jobs:
           path: echo
           args: [time to security scan]
 
-- name: deploy
+- name: production-book-deploy
   public: true
   plan:
     - get: book-producer
       passed: [catalog-consumer, security-scan]
       trigger: true
+    - get: resource-gist
     - task: dev-deployment
       config:
         platform: linux
@@ -59,7 +124,9 @@ jobs:
           type: docker-image
           source: {repository: lwieske/cloudfoundrycli}
         inputs:
-        - name: book-producer
+        - name: resource-gist
         run:
           path: bash
-          args: ["-c", "cf login -a https://api.local.pcfdev.io --skip-ssl-validation -u user -p pass; ls -ltr "]
+          args: ["-c", "cf login -a https://api.local.pcfdev.io --skip-ssl-validation -u user -p pass; \
+          cf p book-producer -p resource-gist/book-producer-0.0.1-SNAPSHOT.jar;
+          "]
