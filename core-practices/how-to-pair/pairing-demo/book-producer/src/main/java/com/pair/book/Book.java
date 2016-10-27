@@ -5,15 +5,15 @@ import java.util.Date;
 public class Book {
     private final String title;
     private final String isbn;
-    private final String author;
+    private final Author author;
 
-    public Book(String title, String isbn, String author) {
+    public Book(String title, String isbn, Author author) {
         this.title = title;
         this.isbn = isbn;
         this.author = author;
     }
 
-    public String getAuthor() {
+    public Author getAuthor() {
         return author;
     }
 

@@ -13,8 +13,7 @@ resources:
   source:
     uri: git@gist.github.com:14521df0e24925c9c3462ab968c6b010.git
     branch: master
-    private_key: 
-
+    private_key:
 
 jobs:
 - name: book-producer
@@ -35,9 +34,6 @@ jobs:
       - name: book-producer
       - name: resource-gist
 
-      outputs:
-      - name: updated-gist
-
       run:
         path: bash
         args: ["-c", " \
@@ -47,7 +43,7 @@ jobs:
           export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64; \
 
           cd book-producer/core-practices/how-to-pair/pairing-demo/; \
-          ./gradlew --stacktrace clean book-producer:build; \
+          ./gradlew clean book-producer:build; \
 
           cd -; \
           cp book-producer/core-practices/how-to-pair/pairing-demo/book-producer/build/libs/book-producer-0.0.1-SNAPSHOT.jar updated-gist;
@@ -86,11 +82,10 @@ jobs:
         run:
           path: bash
           args: ["-c", "
-          ls -altr; \
           export producer_contract_location=$(pwd)/resource-gist/book-producer-contract.json; \
           echo 'find me = ' + ${producer_contract_location};
           cd catalog-consumer/core-practices/how-to-pair/pairing-demo/; \
-          gradle --stacktrace --info consumer:build;
+          gradle clean consumer:build;
           "]
 - name: security-scan
   public: true

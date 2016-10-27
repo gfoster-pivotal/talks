@@ -1,7 +1,1 @@
-[
-  {
-    "title": "foo",
-    "isbn": "bar",
-    "author": "baz"
-  }
-]
+[{"title":"Moby Dick","isbn":"0553213113","author":{"firstName":"Herman","lastName":"Melville"}}]

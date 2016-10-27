@@ -34,19 +34,14 @@ public class BookControllerTest {
     @Test
     public void is_this_a_good_test() {
         Book book = bookController.getBooks().get(0);
-        assertThat(book.getTitle()).isEqualToIgnoringCase("foo");
-        assertThat(book.getIsbn()).isEqualToIgnoringCase("bar");
+        assertThat(book.getTitle()).isEqualToIgnoringCase("Moby Dick");
+        assertThat(book.getIsbn()).isEqualToIgnoringCase("0553213113");
     }
 
-//    @Test
-//    public void aSingleBook_getAListOfBooks_validContract() throws Exception {
-//        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/books");
-//        String actual = mockMvc.perform(requestBuilder)
-//                .andReturn()
-//                .getResponse()
-//                .getContentAsString();
-//        String expected = "[{\"title\":\"foo\",\"isbn\":\"bar\", \"author\":\"baz\"}]";
-//        JSONAssert.assertEquals(expected, actual, false);
-//    }
-
+    @Test
+    public void what_about_this_test() {
+        Author author = bookController.getBooks().get(0).getAuthor();
+        assertThat(author.getFirstName()).isEqualToIgnoringCase("Herman");
+        assertThat(author.getLastName()).isEqualToIgnoringCase("Melville");
+    }
 }
