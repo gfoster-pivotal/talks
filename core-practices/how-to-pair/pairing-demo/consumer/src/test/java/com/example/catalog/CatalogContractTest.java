@@ -62,9 +62,7 @@ public class CatalogContractTest {
     }
 
     @Test
-    public void doStuff() throws Exception {
-        System.out.println("location = " + location);
-        System.out.println("Working Directory = " + System.getProperty("user.dir"));
+    public void v1ResponseFromTheBookProducer_callTheBookProducerApi_returnAValidResponseICanParse() throws Exception {
         FileSystemResource fileSystemResource = new FileSystemResource(location);
         Path inputPath = FileSystems
                 .getDefault()

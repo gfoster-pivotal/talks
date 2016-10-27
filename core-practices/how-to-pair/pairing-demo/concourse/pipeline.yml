@@ -34,6 +34,9 @@ jobs:
       - name: book-producer
       - name: resource-gist
 
+      outputs:
+      - name: updated-gist
+
       run:
         path: bash
         args: ["-c", " \
@@ -83,7 +86,6 @@ jobs:
           path: bash
           args: ["-c", "
           export producer_contract_location=$(pwd)/resource-gist/book-producer-contract.json; \
-          echo 'find me = ' + ${producer_contract_location};
           cd catalog-consumer/core-practices/how-to-pair/pairing-demo/; \
           gradle clean consumer:build;
           "]
