@@ -12,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @RestController
@@ -31,7 +32,10 @@ public class CatalogController {
         };
         ResponseEntity<List<Book>> responseEntity = restTemplate.exchange(bookApiUrl, HttpMethod.GET, null, typeReference);
         Set<String> authors = responseEntity.getBody().stream()
-                .map(Book::getAuthor)
+                .map(book -> {
+                    Author author = book.getAuthor();
+                    return author.getFirstName() + " " + author.getLastName();
+                })
                 .collect(Collectors.toSet());
         return new Catalog(authors, "Bucktown Library");
     }

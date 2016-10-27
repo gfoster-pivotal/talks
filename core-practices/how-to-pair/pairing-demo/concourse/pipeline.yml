@@ -107,7 +107,7 @@ jobs:
           path: echo
           args: [time to security scan]
 
-- name: production-book-deploy
+- name: smoke-test-book-deploy
   public: true
   plan:
     - get: book-producer
@@ -125,5 +125,29 @@ jobs:
         run:
           path: bash
           args: ["-c", "cf login -a https://api.local.pcfdev.io --skip-ssl-validation -u user -p pass; \
-          cf p book-producer -p resource-gist/book-producer-0.0.1-SNAPSHOT.jar;
+          cf p book-producer-new -p resource-gist/book-producer-0.0.1-SNAPSHOT.jar;
+          "]
+- name: production-book-deploy
+  public: true
+  plan:
+    - get: book-producer
+      passed: [smoke-test-book-deploy]
+    - get: resource-gist
+    - task: cut-over
+      config:
+        platform: linux
+        image_resource:
+          type: docker-image
+          source: {repository: lwieske/cloudfoundrycli}
+        inputs:
+        - name: resource-gist
+        run:
+          path: bash
+          args: ["-c", "
+          cf login -a https://api.local.pcfdev.io --skip-ssl-validation -u user -p pass; \
+          cf map-route book-producer-new local.pcfdev.io --hostname book;
+          cf d book-producer-current -f -r;
+          cf p book-producer-current -p resource-gist/book-producer-0.0.1-SNAPSHOT.jar;
+          cf map-route book-producer-current local.pcfdev.io --hostname book;
+          cf d book-producer-new -f -r;
           "]

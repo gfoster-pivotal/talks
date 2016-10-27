@@ -3,9 +3,9 @@ package com.example.catalog;
 public class Book {
     private String title;
     private String isbn;
-    private String author;
+    private Author author;
 
-    public String getAuthor() {
+    public Author getAuthor() {
         return author;
     }
 
@@ -25,7 +25,7 @@ public class Book {
         this.isbn = isbn;
     }
 
-    public void setAuthor(String author) {
+    public void setAuthor(Author author) {
         this.author = author;
     }
 }

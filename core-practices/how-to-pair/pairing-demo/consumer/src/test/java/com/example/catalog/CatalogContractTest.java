@@ -62,7 +62,7 @@ public class CatalogContractTest {
     }
 
     @Test
-    public void v1ResponseFromTheBookProducer_callTheBookProducerApi_returnAValidResponseICanParse() throws Exception {
+    public void validResponseFromTheBookProducer_callTheBookProducerApi_catalogReturnsASpecificContract() throws Exception {
         FileSystemResource fileSystemResource = new FileSystemResource(location);
         Path inputPath = FileSystems
                 .getDefault()
