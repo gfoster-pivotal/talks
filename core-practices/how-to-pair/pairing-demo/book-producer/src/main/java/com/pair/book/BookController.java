@@ -1,5 +1,6 @@
 package com.pair.book;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -7,11 +8,69 @@ import java.time.Instant;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @RestController
 public class BookController {
+    private final BookRepository bookRepository;
+
+    @Autowired
+    public BookController(BookRepository bookRepository) {
+        this.bookRepository = bookRepository;
+    }
+
     @RequestMapping(path = "/books")
     public List<Book> getBooks() {
-        return Collections.singletonList(new Book("Moby Dick", "0553213113", Date.from(Instant.now()), new Author("Herman", "Melville")));
+        List<BookEntity> bookEntities = bookRepository.findAll();
+        return bookEntities.stream()
+                .map(bookEntity -> {
+                    Author author = new Author(bookEntity.getFirstName(), bookEntity.getLastName());
+                    return new Book(bookEntity.getTitle(), bookEntity.getIsbn(), author);
+                })
+                .collect(Collectors.toList());
+    }
+
+    protected static final class Author {
+        private final String firstName;
+        private final String lastName;
+
+        public Author(String firstName, String lastName) {
+            this.firstName = firstName;
+            this.lastName = lastName;
+        }
+
+        public String getFirstName() {
+            return firstName;
+        }
+
+        public String getLastName() {
+            return lastName;
+        }
+    }
+
+    protected static final class Book {
+        private final String title;
+        private final String isbn;
+        private final Author author;
+
+        public Book(String title, String isbn, Author author) {
+            this.title = title;
+            this.isbn = isbn;
+            this.author = author;
+        }
+
+        public Author getAuthor() {
+            return author;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public String getIsbn() {
+            return isbn;
+        }
+
     }
 }
