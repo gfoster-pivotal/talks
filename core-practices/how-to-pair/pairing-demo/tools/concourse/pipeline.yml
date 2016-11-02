@@ -145,9 +145,9 @@ jobs:
           path: bash
           args: ["-c", "
           cf login -a https://api.local.pcfdev.io --skip-ssl-validation -u user -p pass; \
-          cf map-route book-producer-new local.pcfdev.io --hostname book;
-          cf d book-producer-current -f -r;
+          cf map-route book-producer-new local.pcfdev.io --hostname book-producer;
+          cf d book-producer-current -f;
           cf p book-producer-current -p resource-gist/book-producer-0.0.1-SNAPSHOT.jar;
-          cf map-route book-producer-current local.pcfdev.io --hostname book;
-          cf d book-producer-new -f -r;
+          cf map-route book-producer-current local.pcfdev.io --hostname book-producer;
+          cf d book-producer-new -f;
           "]
