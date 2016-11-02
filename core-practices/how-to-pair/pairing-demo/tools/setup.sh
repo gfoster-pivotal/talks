@@ -1,5 +1,10 @@
 #!/bin/sh
 
+cd vagrant;
+vagrant destroy -f;
+vagrant up;
+cd ..;
+
 fly -t demo-api login  --concourse-url http://192.168.100.4:8080;
 fly -t demo-api sync;
 fly sp -t demo-api -p demo-api -c concourse/pipeline.yml -n;
