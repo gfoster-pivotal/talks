@@ -44,7 +44,6 @@ public class BookControllerContractTest {
 
         FileSystemResource fileSystemResource = new FileSystemResource("src/test/resources/contracts/output.json");
         File file = fileSystemResource.getFile();
-        System.out.println("file = " + file);
         BufferedWriter out = new BufferedWriter(new FileWriter(file));
         out.write(contentAsString);
         out.close();
