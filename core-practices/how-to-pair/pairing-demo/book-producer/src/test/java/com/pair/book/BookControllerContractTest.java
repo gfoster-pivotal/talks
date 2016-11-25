@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -20,6 +21,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class BookControllerContractTest {
+    @Value("${book.api.version}")
+    String apiVersion;
+
     @Autowired
     BookController bookController;
 
@@ -42,9 +46,15 @@ public class BookControllerContractTest {
                 .getResponse()
                 .getContentAsString();
 
-        FileSystemResource fileSystemResource = new FileSystemResource("src/test/resources/contracts/output.json");
-        File file = fileSystemResource.getFile();
-        BufferedWriter out = new BufferedWriter(new FileWriter(file));
+        String path = "src/test/resources/contracts/books-contract-" + apiVersion + ".json";
+        FileSystemResource fileSystemResource = new FileSystemResource(path);
+        BufferedWriter out = new BufferedWriter(new FileWriter(fileSystemResource.getFile()));
+        out.write(contentAsString);
+        out.close();
+
+        path = "src/test/resources/contracts/output.json";
+        fileSystemResource = new FileSystemResource(path);
+        out = new BufferedWriter(new FileWriter(fileSystemResource.getFile()));
         out.write(contentAsString);
         out.close();
     }

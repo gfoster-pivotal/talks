@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,12 +19,12 @@ public class BookController {
 
     @RequestMapping(path = "/books")
     public List<Book> getBooks() {
-        List<BookEntity> bookEntities = bookRepository.findAll();
-        return bookEntities.stream()
+        return bookRepository.findAll().stream()
                 .map(bookEntity -> {
                     Author author = new Author(bookEntity.getFirstName(), bookEntity.getLastName());
                     return new Book(bookEntity.getTitle(), bookEntity.getIsbn(), author);
                 })
+                .sorted((o1, o2) -> o1.getAuthor().lastName.compareTo(o2.author.lastName))
                 .collect(Collectors.toList());
     }
 

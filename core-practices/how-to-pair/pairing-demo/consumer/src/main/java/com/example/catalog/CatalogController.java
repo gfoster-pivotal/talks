@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -28,13 +29,17 @@ public class CatalogController {
 
     @RequestMapping(path = "/catalogs", method = RequestMethod.GET)
     public Catalog catalog() {
-        ParameterizedTypeReference<List<Book>> typeReference = new ParameterizedTypeReference<List<Book>>() {
-        };
-        ResponseEntity<List<Book>> responseEntity = restTemplate.exchange(bookApiUrl, HttpMethod.GET, null, typeReference);
-        Set<String> authors = responseEntity.getBody().stream()
+        ResponseEntity<List> responseEntity = restTemplate.exchange(bookApiUrl, HttpMethod.GET, null, List.class);
+        List<Map> books = responseEntity.getBody();
+        Set<String> authors = books
+                .stream()
                 .map(book -> {
-                    Author author = book.getAuthor();
-                    return author.getFirstName() + " " + author.getLastName();
+                    if (book.containsKey("author")) {
+                        Map<String, String> author = (Map<String, String>) book.get("author");
+                        return author.get("firstName").toString() + " " + author.get("lastName").toString();
+                    } else {
+                        return book.get("firstName").toString() + " " + book.get("lastName").toString();
+                    }
                 })
                 .collect(Collectors.toSet());
         return new Catalog(authors, "Bucktown Library");

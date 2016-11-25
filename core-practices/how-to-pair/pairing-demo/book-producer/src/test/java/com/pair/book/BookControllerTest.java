@@ -10,7 +10,9 @@ import org.mockito.junit.MockitoRule;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -33,6 +35,24 @@ public class BookControllerTest {
         mockMvc = MockMvcBuilders
                 .standaloneSetup(bookController)
                 .build();
+    }
+
+    @Test
+    public void thereAreMultipleBooks_getTheListOfBooks_booksShouldBeSortedByLastName() {
+        // given
+        BookEntity firstBook = new BookEntity();
+        firstBook.setLastName("a");
+        BookEntity secondBook = new BookEntity();
+        secondBook.setLastName("b");
+        when(bookRepository.findAll()).thenReturn(Arrays.asList(secondBook, firstBook));
+
+        // when
+        List<BookController.Book> books = bookController.getBooks();
+
+        // then
+        String authorsLastNameFirstBook = books.get(0).getAuthor().getLastName();
+        String authorsLastNameSecondBook = books.get(1).getAuthor().getLastName();
+        assertThat(authorsLastNameFirstBook.compareTo(authorsLastNameSecondBook)).isEqualTo(-1);
     }
 
     @Test
